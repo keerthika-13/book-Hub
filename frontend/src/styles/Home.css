@@ -1,0 +1,196 @@
+/* ===============================
+   ROOT CONTAINER
+================================ */
+.home {
+  background-color: #f9fafb;
+  padding: 60px 100px;
+}
+
+/* Force vertical stacking */
+.home section {
+  width: 100%;
+  margin-bottom: 100px;
+}
+
+/* Center all sections except hero */
+.features,
+.how,
+.categories,
+.community,
+.cta {
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+/* ===============================
+   HERO SECTION
+================================ */
+.hero {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 60px;
+  padding: 60px;
+  background-color: #ffffff;
+  border-radius: 12px;
+}
+
+.hero-text {
+  max-width: 520px;
+}
+
+.hero-text h1 {
+  font-size: 42px;
+  line-height: 1.2;
+  margin-bottom: 20px;
+}
+
+.hero-text p {
+  font-size: 18px;
+  margin-bottom: 20px;
+}
+
+.hero button {
+  margin-right: 15px;
+  margin-top: 10px;
+  padding: 12px 24px;
+  font-size: 15px;
+  border-radius: 6px;
+  border: 1px solid #000;
+  background-color: #fff;
+  cursor: pointer;
+}
+
+/* ===============================
+   FEATURES SECTION
+================================ */
+.features {
+  text-align: center;
+}
+
+.features h2 {
+  margin-bottom: 40px;
+}
+
+.features ul {
+  list-style: none;
+  display: flex;
+  justify-content: center;
+  gap: 30px;
+  padding: 0;
+}
+
+.features li {
+  background-color: #f1f5f9;
+  padding: 20px;
+  width: 160px;
+  text-align: center;
+  border-radius: 8px;
+  font-weight: 600;
+}
+
+/* ===============================
+   HOW IT WORKS
+================================ */
+.how {
+  padding: 40px;
+  background-color: #ffffff;
+  border-radius: 12px;
+}
+
+.how h2 {
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+.how ol {
+  max-width: 600px;
+  margin: auto;
+  font-size: 16px;
+}
+
+.how li {
+  margin-bottom: 15px;
+}
+
+/* ===============================
+   CATEGORIES
+================================ */
+.categories {
+  text-align: center;
+}
+
+.categories h2 {
+  margin-bottom: 20px;
+}
+
+.categories span {
+  display: inline-block;
+  margin: 10px;
+  padding: 10px 18px;
+  border-radius: 20px;
+  background-color: #e0e7ff;
+  font-weight: 500;
+}
+
+/* ===============================
+   COMMUNITY / WHY BOOK-HUB
+================================ */
+.community {
+  background-color: #ffffff;
+  padding: 40px;
+  border-radius: 12px;
+  text-align: center;
+}
+
+.community h2 {
+  margin-bottom: 20px;
+}
+
+/* ===============================
+   CTA SECTION
+================================ */
+.cta {
+  text-align: center;
+  padding: 60px;
+  background-color: #2563eb;
+  color: white;
+  border-radius: 12px;
+}
+
+.cta h2 {
+  margin-bottom: 20px;
+}
+
+.cta button {
+  padding: 12px 30px;
+  font-size: 16px;
+  border: none;
+  background-color: white;
+  color: #2563eb;
+  cursor: pointer;
+  border-radius: 6px;
+}
+/* Hover effects */
+.features li:hover {
+  transform: translateY(-5px);
+  transition: 0.3s ease;
+  background-color: #e0e7ff;
+}
+
+.hero button:hover,
+.cta button:hover {
+  opacity: 0.9;
+}
+
+/* Images */
+.hero img {
+  width: 380px;
+}
+
+.community img {
+  width: 300px;
+  margin-bottom: 20px;
+  border-radius: 10px;
+}
+
