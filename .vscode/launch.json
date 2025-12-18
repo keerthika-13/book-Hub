@@ -1,0 +1,25 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "type": "java",
+      "name": "Run Book-Hub Backend",
+      "request": "launch",
+      "mainClass": "com.bookhub.BookHubApplication",
+      "projectName": "book-hub",
+      "cwd": "${workspaceFolder}/backend",
+      "console": "integratedTerminal",
+      "args": "",
+      "envFile": "${workspaceFolder}/backend/.env"
+    },
+    {
+      "type": "java",
+      "name": "Debug Book-Hub Backend",
+      "request": "launch",
+      "mainClass": "com.bookhub.BookHubApplication",
+      "projectName": "book-hub",
+      "cwd": "${workspaceFolder}/backend",
+      "console": "integratedTerminal"
+    }
+  ]
+}

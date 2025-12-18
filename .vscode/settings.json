@@ -1,0 +1,9 @@
+{
+  "java.configuration.updateBuildConfiguration": "automatic",
+  "java.compile.nullAnalysis.mode": "automatic",
+  "spring-boot.ls.java.home": "",
+  "java.home": "",
+  "maven.terminal.useJavaHome": true,
+  "java.debug.settings.onBuildFailureProceed": true,
+  "spring-boot.ls.checkJVM": false
+}
