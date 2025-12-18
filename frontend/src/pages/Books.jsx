@@ -18,6 +18,20 @@ function Books() {
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedBook, setSelectedBook] = useState(null);
   const [books, setBooks] = useState([]);
+  const [showTransactionForm, setShowTransactionForm] = useState(false);
+  const [transactionType, setTransactionType] = useState("");
+  const [userDetails, setUserDetails] = useState({
+    name: "",
+    email: "",
+    phone: "",
+    address: ""
+  });
+  const [paymentDetails, setPaymentDetails] = useState({
+    paymentMethod: "card",
+    cardNumber: "",
+    expiryDate: "",
+    cvv: ""
+  });
 
   // Map backend paths to imported images
   const imageMap = {
@@ -45,6 +59,51 @@ function Books() {
       .then(data => setBooks(data.data || []))
       .catch(err => console.error("Error fetching books:", err));
   }, []);
+
+  const handleTransaction = (type) => {
+    setTransactionType(type);
+    setShowTransactionForm(true);
+  };
+
+  const handleUserDetailsChange = (e) => {
+    setUserDetails({ ...userDetails, [e.target.name]: e.target.value });
+  };
+
+  const handlePaymentDetailsChange = (e) => {
+    setPaymentDetails({ ...paymentDetails, [e.target.name]: e.target.value });
+  };
+
+  const submitTransaction = (e) => {
+    e.preventDefault();
+    
+    const transactionData = {
+      bookId: selectedBook.id,
+      bookTitle: selectedBook.title,
+      transactionType: transactionType,
+      userDetails: userDetails,
+      paymentDetails: transactionType !== "donate" ? paymentDetails : null,
+      price: selectedBook.price,
+      date: new Date().toISOString()
+    };
+
+    fetch("http://localhost:8080/api/transactions", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(transactionData)
+    })
+      .then(res => res.json())
+      .then(data => {
+        alert(`${transactionType === "sell" ? "Purchase" : transactionType === "rent" ? "Rental" : "Donation request"} successful!`);
+        setShowTransactionForm(false);
+        setSelectedBook(null);
+        setUserDetails({ name: "", email: "", phone: "", address: "" });
+        setPaymentDetails({ paymentMethod: "card", cardNumber: "", expiryDate: "", cvv: "" });
+      })
+      .catch(err => {
+        console.error("Error submitting transaction:", err);
+        alert("Transaction failed. Please try again.");
+      });
+  };
 
   /* FILTER + SEARCH */
   const filteredBooks = books.filter(book => {
@@ -145,7 +204,7 @@ function Books() {
                 <p className="flow-info">
                   This book is available for free donation.
                 </p>
-                <button className="action-btn">
+                <button className="action-btn" onClick={() => handleTransaction("donate")}>
                   Request Donation
                 </button>
               </>
@@ -156,7 +215,7 @@ function Books() {
                 <p className="flow-info">
                   This book can be rented for a limited period.
                 </p>
-                <button className="action-btn">
+                <button className="action-btn" onClick={() => handleTransaction("rent")}>
                   Proceed to Rent
                 </button>
               </>
@@ -167,11 +226,129 @@ function Books() {
                 <p className="flow-info">
                   This book is available for purchase.
                 </p>
-                <button className="action-btn">
+                <button className="action-btn" onClick={() => handleTransaction("sell")}>
                   Buy Now
                 </button>
               </>
             )}
+          </div>
+        </div>
+      )}
+
+      {/* TRANSACTION FORM MODAL */}
+      {showTransactionForm && (
+        <div className="modal-overlay" onClick={() => setShowTransactionForm(false)}>
+          <div className="modal" onClick={(e) => e.stopPropagation()} style={{maxWidth: '500px', maxHeight: '90vh', overflowY: 'auto'}}>
+            <button className="close-btn" onClick={() => setShowTransactionForm(false)}>
+              ×
+            </button>
+
+            <h2>
+              {transactionType === "sell" ? "Purchase Book" : transactionType === "rent" ? "Rent Book" : "Request Donation"}
+            </h2>
+            <p style={{marginBottom: '20px', color: '#666'}}>
+              Book: <strong>{selectedBook?.title}</strong>
+              {selectedBook?.price && <span> - ${selectedBook.price}</span>}
+            </p>
+
+            <form onSubmit={submitTransaction}>
+              <h3>Your Details</h3>
+              <input
+                name="name"
+                placeholder="Full Name"
+                value={userDetails.name}
+                onChange={handleUserDetailsChange}
+                required
+              />
+              <input
+                name="email"
+                type="email"
+                placeholder="Email"
+                value={userDetails.email}
+                onChange={handleUserDetailsChange}
+                required
+              />
+              <input
+                name="phone"
+                placeholder="Phone Number"
+                value={userDetails.phone}
+                onChange={handleUserDetailsChange}
+                required
+              />
+              <textarea
+                name="address"
+                placeholder="Delivery Address"
+                value={userDetails.address}
+                onChange={handleUserDetailsChange}
+                rows="3"
+                required
+                style={{width: '100%', padding: '10px', marginBottom: '15px', borderRadius: '5px', border: '1px solid #ddd'}}
+              />
+
+              {transactionType !== "donate" && (
+                <>
+                  <h3>Payment Details</h3>
+                  <select
+                    name="paymentMethod"
+                    value={paymentDetails.paymentMethod}
+                    onChange={handlePaymentDetailsChange}
+                    required
+                  >
+                    <option value="card">Credit/Debit Card</option>
+                    <option value="upi">UPI</option>
+                    <option value="netbanking">Net Banking</option>
+                    <option value="cod">Cash on Delivery</option>
+                  </select>
+
+                  {paymentDetails.paymentMethod === "card" && (
+                    <>
+                      <input
+                        name="cardNumber"
+                        placeholder="Card Number"
+                        value={paymentDetails.cardNumber}
+                        onChange={handlePaymentDetailsChange}
+                        maxLength="16"
+                        required
+                      />
+                      <div style={{display: 'flex', gap: '10px'}}>
+                        <input
+                          name="expiryDate"
+                          placeholder="MM/YY"
+                          value={paymentDetails.expiryDate}
+                          onChange={handlePaymentDetailsChange}
+                          maxLength="5"
+                          required
+                          style={{flex: 1}}
+                        />
+                        <input
+                          name="cvv"
+                          placeholder="CVV"
+                          value={paymentDetails.cvv}
+                          onChange={handlePaymentDetailsChange}
+                          maxLength="3"
+                          required
+                          style={{flex: 1}}
+                        />
+                      </div>
+                    </>
+                  )}
+
+                  {paymentDetails.paymentMethod === "upi" && (
+                    <input
+                      name="upiId"
+                      placeholder="UPI ID"
+                      value={paymentDetails.upiId || ""}
+                      onChange={handlePaymentDetailsChange}
+                      required
+                    />
+                  )}
+                </>
+              )}
+
+              <button type="submit" className="action-btn" style={{width: '100%', marginTop: '20px'}}>
+                {transactionType === "donate" ? "Submit Request" : "Confirm Payment"}
+              </button>
+            </form>
           </div>
         </div>
       )}
